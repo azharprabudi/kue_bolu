@@ -59,7 +59,7 @@ $status = $this->session->userdata('status');
             </li>
             <li><a href="#"><i class="fa fa-book"></i> Laporan </a></li>
             <li class="header">User Account</li>
-            <li><a href="#"><i class="fa fa-circle-o text-warning"></i>Setting Account</a></li>
+            <li><a href="<?php echo base_url('index.php/setting_account') ?>"><i class="fa fa-circle-o text-warning"></i>Setting Account</a></li>
             <li><a href="<?php echo base_url('index.php/welcome/logout')?>"><i class="fa fa-circle-o text-danger"></i>Logout</a></li>
            
         </ul>
