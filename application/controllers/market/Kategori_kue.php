@@ -66,7 +66,7 @@ class Kategori_kue extends CI_Controller {
 	}
 
 	public function delete(){
-		$id_kategori =  htmlspecialchars($this->uri->segment(4));
+		$id_kategori = htmlspecialchars($this->input->post('id_kategori'));
 		if($id_kategori != ''){
 			$this->do_delete($id_kategori);
 		}
@@ -120,6 +120,62 @@ class Kategori_kue extends CI_Controller {
                   </div>');
 				redirect('market/kategori_kue');
 			}
+		}
+	}
+
+	public function search(){
+		if(isset($_POST['search'])){
+			$search_id_kategori_kue = htmlspecialchars($this->input->post('search_id_kategori'));
+			$search_nama_kategori_kue = htmlspecialchars($this->input->post('search_nama_kategori'));
+			if( $search_id_kategori_kue != '' || $search_nama_kategori_kue != '' ){
+				//set session
+				$this->session->set_userdata('search_id_kategori_kue',$search_id_kategori_kue);
+				$this->session->set_userdata('search_nama_kategori_kue',$search_nama_kategori_kue);
+				//end set session
+				$data = array(
+					'id_kategori' => $this->session->userdata('search_id_kategori_kue'),
+					'nama_kategori' => $this->session->userdata('search_nama_kategori_kue')
+				);
+				$query = $this->model->get_data_by_search($data);
+				unset($data);
+				$data = array();
+				if($query){
+					$data['list_data'] = $query ; 
+					$this->load->view('users/Kategori_kue_view',$data);
+				}
+				else{
+					$this->session->set_flashdata('not_found','<script><alert> Data Tidak Di Temukan </alert></script>');
+					redirect(base_url('index.php/market/Kategori_kue/view'));	
+				}
+			}
+			else{
+				redirect(base_url('index.php/market/Kategori_kue/view'));
+			}
+		}
+		else if(isset($_POST['bersihkan'])){
+			$this->bersihkan_pencarian();
+		}
+	}
+
+	private function bersihkan_pencarian(){
+		$id_kategori = $this->session->userdata('search_id_kategori_kue');
+		$nama_kategori = $this->session->userdata('search_nama_kategori_kue') ;
+		if( isset( $id_kategori ) ){
+			$this->session->unset_userdata('search_id_kategori_kue');
+			}
+		if( isset( $nama_kategori ) ){
+			$this->session->unset_userdata('search_nama_kategori_kue');
+		}
+		redirect(base_url('index.php/market/Kategori_kue/view'));
+	}
+
+	public function get_id_max(){
+		$id_kategori = $this->model->get_id_max();
+		if($id_kategori != NULL){
+			$data = array(
+				'id_kategori' => $id_kategori
+				);
+			echo json_encode($data);
 		}
 	}
 

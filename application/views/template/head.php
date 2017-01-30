@@ -15,7 +15,10 @@
         <!-- AdminLTE Skins. Choose a skin from the css/skins 
              folder instead of downloading all of them to reduce the load. -->
         <link href="<?php echo base_url('assets/AdminLTE-2.0.5/dist/css/skins/_all-skins.min.css') ?>" rel="stylesheet" type="text/css" />
-
+        <link href="<?php echo base_url('assets/custom_css/new_style.css')?>" rel="stylesheet" type="text/css" />
+        <link href="<?php echo base_url('assets/custom_css/select2.min.css')?>" rel="stylesheet" type="text/css">
+        <link href="<?php echo base_url('assets/custom_css/sweetalert2.min.css')?>" rel="stylesheet" type="text/css">
+        <script src="<?php echo base_url('assets/js/sweetalert2.min.js')?>" type="text/javascript"></script>
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>

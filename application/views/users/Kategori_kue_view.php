@@ -1,6 +1,8 @@
 <?php
 $this->load->view('template/head');
-$search_kategori_kue = $this->session->userdata('search_kategori_kue');
+$search_id_kategori_kue = $this->session->userdata('search_id_kategori_kue');
+$search_nama_kategori_kue = $this->session->userdata('search_nama_kategori_kue');
+$not_found = $this->session->flashdata('not_found');
 ?>
 
 <!--tambahkan custom css disini-->
@@ -16,26 +18,61 @@ $search_kategori_kue = $this->session->userdata('search_kategori_kue');
 <link href="<?php echo base_url('assets/AdminLTE-2.0.5/plugins/daterangepicker/daterangepicker-bs3.css') ?>" rel="stylesheet" type="text/css" />
 <!-- bootstrap wysihtml5 - text editor -->
 <link href="<?php echo base_url('assets/AdminLTE-2.0.5/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css') ?>" rel="stylesheet" type="text/css" />
+
 <?php
 $this->load->view('template/topbar');
 $this->load->view('template/sidebar');
 ?>
-<style type="text/css">
-  .form-modal{
-    padding: 20px;
-  }
-  .form-modal input{
-    margin-bottom: 20px;
-  }
-  a{
-    text-decoration: none;
-    color:white;
-  }
-  a:hover{
-    color:white;
-  }
-</style>
+<?php
+
+if(isset($not_found)){
+  echo $not_found;
+}
+
+?>
 <!-- Main content -->
+<section class="sub-content">
+  <!-- BOX SEARCH START -->
+<div class="box">
+  <div class="box-header with-border">
+      <h3 class="box-title">Pencarian</h3>
+          <div class="box-tools pull-right">
+                <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+          </div>
+  </di>
+  <div style="margin-top: 20px"></div>
+  <div class="box-body">
+  <fieldset class="fieldset" style="border:1px solid;border-color:#D5D5D4;border-radius: 5px;padding: 2%;">
+    <form method="POST" action="<?php echo base_url('index.php/market/kategori_kue/search')?>">
+      <div class="row">
+        <div class="col-xs-3">
+        <label for="id_kategori">Id Kategori</label>
+        <div class="input-group">
+          <input type="text" name="search_id_kategori" class="form-control" style="width:250px;" value="<?php if(isset($search_id_kategori_kue)){echo $search_id_kategori_kue;}?>">
+        </div>
+        </div>
+        <div class="col-xs-3">
+        <label for="nama_kategori">Nama Kategori</label>
+        <div class="input-group">
+          <input type="text" name="search_nama_kategori"  class="form-control" style="width:250px;" value="<?php if(isset($search_nama_kategori_kue)){echo $search_nama_kategori_kue;}?>">
+        </div>
+        </div>
+      </div>
+      <div style="margin-top: 40px"></div>
+      <div class="row" style="float: right;">
+      <div class="col-xs-5">
+        <button type="submit" class="btn btn-block btn-primary" style="width:120px;" name="search"><i class="fa fa-search"></i> Cari</button>
+      </div>
+      <div class="col-xs-5">
+        <button type="submit" class="btn btn-block btn-warning" style="width:120px;" name="bersihkan"><i class="fa fa-fw fa-refresh"></i>Bersihkan</button>
+      </div>
+      </div>
+    </form>
+    </fieldset>
+</div><!-- /.box-body -->
+</div>
+<!-- BOX SEARCH END -->
+</section>
 <section class="content">
 <div class="box">
     <div class="box-header">
@@ -50,37 +87,46 @@ $this->load->view('template/sidebar');
     $edit = $this->session->flashdata('edit');
     if(isset($edit))echo $this->session->flashdata('edit')?>
   
-    <button class="btn btn-block btn-primary" style="height:40px;width: 100px;float:left;margin-top: 10px;margin-bottom:20px;" data-toggle="modal" data-target="#myModal">Add New</button>
-        <form method="POST" action="">
-            <div class="input-group">
-              <input type="text" name="search_kategori_kue" class="form-control" placeholder="Search..." style="width:150px;float:right;margin-top: 10px;margin-bottom: 10px;">
-              <span class="input-group-btn">
-                <button type="submit" name="seach" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i></button>
-              </span>
-            </div>
-        </form>
+    <button class="btn btn-block btn-primary" style="width: 100px;float:left;margin-top: 10px;margin-bottom:20px;" data-toggle="modal" data-target="#myModal" onClick="get_id_max()">Add New</button>
         <table class="table table-bordered">
         <tbody>
         <tr>
-          <th style="text-align:center;width: 30px;">Id Kategori</th>
-          <th style="text-align:center">Nama Kategori</th>
-          <th style="width:20px;text-align:center" colspan="2">Action</th>
+          <th style="text-align:center;width: 30px;background-color:#D5D5D4">Id Kategori</th>
+          <th style="text-align:center;background-color:#D5D5D4">Nama Kategori</th>
+          <th style="width:20px;text-align:center;background-color:#D5D5D4" colspan="2">Action</th>
         </tr>
         <?php 
-        if(count($allKategori) > 0){    
-            $index = 0;
-            foreach($allKategori as $row){
-             $index += 1;
-             $tmp = $index;
+          if($this->uri->segment(3) != 'search'){
+            if(count($allKategori) > 0){    
+                $index = 0;
+                  foreach($allKategori as $row){
+                   $index += 1;
+                   $tmp = $index;
         ?>
             <tr>
                 <td><?php echo $row->id_kategori?></td>
                 <td><?php echo $row->nama_kategori?></td>
                 <td style="width:20px"><button type="button" class="btn btn-block btn-warning" onClick="editId('<?php echo $row->id_kategori?>')" data-target="#editModal" data-toggle="modal">Edit</button></td>
-                <td style="width:20px"><button type="button" class="btn btn-block btn-danger" onClick="deleteId()"><a href='<?php echo base_url('index.php/market/kategori_kue/delete/')."/$row->id_kategori"?>'>Hapus</button></td>
+                <td style="width:20px"><button type="button" class="btn btn-block btn-danger" onClick="deleteId(<?php echo $row->id_kategori ?>)">Hapus</button></td>
             </tr>
-        <?php        
+        <?php    
+                    }
+                  }    
+               }
+            else{
+              if($list_data != FALSE){
+                foreach ($list_data as $row) {
+                  ?>
+            <tr>
+                <td><?php echo $row->id_kategori?></td>
+                <td><?php echo $row->nama_kategori?></td>
+                <td style="width:20px"><button type="button" class="btn btn-block btn-warning" onClick="editId('<?php echo $row->id_kategori?>')" data-target="#editModal" data-toggle="modal">Edit</button></td>
+                <td style="width:20px"><button type="button" class="btn btn-block btn-danger" onClick="deleteId()">Hapus</button></td>
+            </tr>
+
+      <?php
                 }
+              }
             }
         ?>
       </tbody>
@@ -140,7 +186,11 @@ $this->load->view('template/sidebar');
       <!---END EDIT MODAL -->
     </div><!-- /.box-body -->
     <div class="box-footer clearfix">
-         <?php echo $pagination?>
+         <?php 
+         if($this->uri->segment(3) != 'search'){
+            echo $pagination;
+         }
+         ?>
     </div>
   </div>
 </section><!-- /.content -->
@@ -160,14 +210,47 @@ $this->load->view('template/js');
 $this->load->view('template/foot');
 ?>
 <script language="JavaScript">
-  console.log('test');
-  function deleteId(){
-    var txt = confirm('Yakin untuk menghapus ?');
-    if (txt != true){
-      event.preventDefault();
-    }
-  }
+  //digunakan untuk delete data
+  function deleteId(id_kategori){
+    var base_url = '<?php echo base_url()?>index.php/market/kategori_kue/delete';
+    var txt = swal({
+                  title: 'Apakah anda yakin untuk menghapus ? ',
+                  text: "Kamu tidak dapat mengembalikan ini",
+                  type: 'warning',
+                  showCancelButton: true,
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  confirmButtonText: 'Lanjutkan',
+                  cancelButtonText: 'Batalkan',
+                  confirmButtonClass: 'btn btn-success custom',
+                  cancelButtonClass: 'btn btn-danger custom',
+                  buttonsStyling: false
+                }).then(function () {
+                  $.ajax({
+                        url : base_url,
+                        method :'POST',
+                        dataType : 'JSON',
+                        data : {id_kategori:id_kategori},
+                        success:function(result){
+                        swal(
+                          'Deleted!',
+                          'Data Sudah Ke Hapus',
+                          'success'
+                        )
 
+                      }
+                  })
+                }, function (dismiss) {
+                  if (dismiss === 'cancel') {
+                    swal(
+                      'Cancelled',
+                      'Data Gagal Dihapus',
+                      'error'
+                    )
+                  }
+              })
+  }
+  //get data untuk edit di modal
   function editId(id_kategori){
     var base_url = '<?php echo base_url()?>index.php/market/kategori_kue/editId';
     // alert(base_url);
@@ -180,6 +263,20 @@ $this->load->view('template/foot');
         $('#id_edit').val(result[0].id_kategori);
         $('#id_edit').attr('readonly',true);
         $('#nama_edit').val(result[0].nama_kategori);
+      }
+    });
+  }
+  //digunakan untuk mendapatkan id kategori ketika add new
+  function get_id_max(){
+    var base_url = '<?php echo base_url()?>index.php/market/kategori_kue/get_id_max';
+
+    $.ajax({
+      url:base_url,
+      dataType:'json',
+      method:'POST',
+      success:function(result){
+        $('#id_kategori').val(result.id_kategori);
+        $('#id_kategori').attr('readonly',true);
       }
     });
   }

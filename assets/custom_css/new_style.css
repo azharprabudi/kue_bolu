@@ -1,0 +1,25 @@
+ .form-modal{
+    padding: 20px;
+  }
+  .form-modal input{
+    margin-bottom: 20px;
+  }
+  a{
+    text-decoration: none;
+    color:white;
+  }
+  a:hover{
+    color:white;
+  }
+  .sub-content{
+    padding: 1%;
+  }
+
+  .image-table{
+    width: 5%;
+    height: 8%;
+  }
+
+  .custom{
+    margin-right: 15px;
+  }

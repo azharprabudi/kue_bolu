@@ -26,7 +26,7 @@ $status = $this->session->userdata('status');
                     <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="#"><i class="fa fa-circle-o"></i> List Kue</a></li>
+                    <li><a href="<?php echo base_url('index.php/market/list_kue') ?>"><i class="fa fa-circle-o"></i> List Kue</a></li>
                     <li><a href="<?php echo base_url('index.php/market/kategori_kue')?>"><i class="fa fa-circle-o"></i> Kategori Kue</a></li>
                 </ul>
             </li>
@@ -41,21 +41,6 @@ $status = $this->session->userdata('status');
                     <i class="fa fa-envelope"></i> <span>Mailbox</span>
                     <small class="label pull-right bg-yellow">12</small>
                 </a>
-            </li>
-            <li class="treeview active">
-                <a href="#">
-                    <i class="fa fa-folder"></i> <span>Examples</span>
-                    <i class="fa fa-angle-left pull-right"></i>
-                </a>
-                <ul class="treeview-menu">
-                    <li><a href="#"><i class="fa fa-circle-o"></i> Invoice</a></li>
-                    <li><a href="#"><i class="fa fa-circle-o"></i> Login</a></li>
-                    <li><a href="#"><i class="fa fa-circle-o"></i> Register</a></li>
-                    <li><a href="#"><i class="fa fa-circle-o"></i> Lockscreen</a></li>
-                    <li><a href="#"><i class="fa fa-circle-o"></i> 404 Error</a></li>
-                    <li><a href="#"><i class="fa fa-circle-o"></i> 500 Error</a></li>
-                    <li class="active"><a href="<?php echo site_url('blank') ?>"><i class="fa fa-circle-o"></i> Blank Page</a></li>
-                </ul>
             </li>
             <li><a href="#"><i class="fa fa-book"></i> Laporan </a></li>
             <li class="header">User Account</li>

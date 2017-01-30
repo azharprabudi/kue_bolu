@@ -188,6 +188,9 @@ td,
 th {
   padding: 0;
 }
+.sub-content{
+    padding: 1%;
+  }
 /*! Source: https://github.com/h5bp/html5-boilerplate/blob/master/src/css/main.css */
 @media print {
   *,
